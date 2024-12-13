@@ -23,9 +23,12 @@
     </div>
     <div class="p-[5%] w-1/2 flex">
       <div :key="nozzle.id" v-for="nozzle in status.nozzles" class="gap-x-2 gap-y-4 flex flex-col justify-around items-center w-full">
-        <span class="text-gray-300" :style="{ fontSize: `clamp(0.25rem, 3vw, 8vh)` }">{{ nozzle.id }}</span>
-        <img class="h-3/5" src="/nozzle.svg" />
-        <div class="w-1/4 aspect-[2/1] rounded-lg" :class="nozzle.isVacActive ? 'bg-green-500' : 'bg-sky-950'"></div>
+        <span class="text-gray-300" :style="{ fontSize: `clamp(0.25rem, 4vw, 8vh)` }">{{ nozzle.id }}</span>
+        <img class="h-3/5" :class="nozzle.isPicking ? 'motion-translate-y-loop-[20%] motion-loop-once' : ''" src="/nozzle.svg" />
+        <div class="mt-4 z-50 w-1/4 relative">
+          <div v-if="nozzle.isVacActive" class="w-full aspect-[2/1] z-0 bg-green-500 animate-ping rounded-lg absolute"></div>
+          <div class="transition-colors z-50 w-full aspect-[2/1] rounded-lg" :class="nozzle.isVacActive ? 'bg-green-500 ' : 'bg-sky-950'"></div>
+        </div>
       </div>
     </div>
   </div>
