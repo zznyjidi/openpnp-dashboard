@@ -1,8 +1,10 @@
-import { app, BrowserWindow, shell, ipcMain, screen } from 'electron'
-import { createRequire } from 'node:module'
-import { fileURLToPath } from 'node:url'
+import { app, BrowserWindow, ipcMain, screen, shell } from 'electron'
+import express from 'express'
+import bodyParser from 'body-parser'
 import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import os from 'node:os'
+import { createRequire } from 'node:module'
 
 const require = createRequire(import.meta.url)
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
@@ -39,8 +41,63 @@ if (!app.requestSingleInstanceLock()) {
 }
 
 let win: BrowserWindow | null = null
+let statusServer: express.Express | null = null
 const preload = path.join(__dirname, '../preload/index.mjs')
 const indexHtml = path.join(RENDERER_DIST, 'index.html')
+
+// Status Server Function
+function startStatusServer() {
+  const serverApp = express()
+  const PORT = 3000
+
+  // Middleware
+  serverApp.use(bodyParser.json())
+
+  // Single machine status object with optional fields
+  let machineStatus = {
+    done: 0,
+    total: 0,
+    nozzles: [{ id: "L" }, { id: "R" }]
+  }
+
+  // Flexible update endpoint
+  serverApp.post('/update-status', (req, res) => {
+    const { 
+      done, 
+      total, 
+      nozzles
+    } = req.body
+
+    // Update only the provided fields
+    machineStatus = {
+      done: done ?? machineStatus.done,
+      total: total ?? machineStatus.total,
+      nozzles: nozzles ?? machineStatus.nozzles
+    }
+
+    // Broadcast status update to renderer process
+    if (win) {
+      win.webContents.send('machine-status-updated', machineStatus)
+    }
+
+    res.json({
+      message: 'Status updated successfully',
+      status: machineStatus
+    })
+  })
+
+  // Get current status
+  serverApp.get('/status', (req, res) => {
+    res.json(machineStatus)
+  })
+
+  // Start the server
+  const server = serverApp.listen(PORT, () => {
+    console.log(`Machine Status API running on port ${PORT}`)
+  })
+
+  return serverApp
+}
 
 async function createWindow() {
   const primaryDisplay = screen.getPrimaryDisplay();
@@ -81,6 +138,9 @@ async function createWindow() {
     return { action: 'deny' }
   })
   // win.webContents.on('will-navigate', (event, url) => { }) #344
+
+  // Start the status server
+  statusServer = startStatusServer()
 }
 
 app.whenReady().then(createWindow)
@@ -121,5 +181,14 @@ ipcMain.handle('open-win', (_, arg) => {
     childWindow.loadURL(`${VITE_DEV_SERVER_URL}#${arg}`)
   } else {
     childWindow.loadFile(indexHtml, { hash: arg })
+  }
+})
+
+// Optional: Add a handler to stop the server when the app is quitting
+app.on('will-quit', () => {
+  // If you need to do any cleanup when the server is stopping
+  if (statusServer) {
+    // If you want to close the server explicitly
+    // Note: Express server closes automatically when the app quits
   }
 })

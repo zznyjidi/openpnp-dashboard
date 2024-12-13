@@ -18,9 +18,8 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
     const [channel, ...omit] = args
     return ipcRenderer.invoke(channel, ...omit)
   },
-
-  // You can expose other APTs you need here.
-  // ...
+  onMachineStatusUpdate: (callback) => 
+    ipcRenderer.on('machine-status-updated', callback)
 })
 
 // --------- Preload scripts loading ---------

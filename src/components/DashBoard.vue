@@ -16,16 +16,16 @@
             <!-- Percentage Text -->
             <div class="font-bold text-gray-100" :style="{ fontSize: `clamp(0.5rem, 10vw, 15vh)` }">{{ progress }}%</div>
             <!-- Small Text -->
-            <div class="absolute top-[60%] text-gray-300 mt-1" :style="{ fontSize: `clamp(0.25rem, 2vw, 8vh)` }">{{ done }} / {{ total }}</div>
+            <div class="absolute top-[60%] text-gray-300 mt-1" :style="{ fontSize: `clamp(0.25rem, 2vw, 8vh)` }">{{ status.done }} / {{ status.total }}</div>
           </div>
         </div>
       </div>
     </div>
     <div class="p-[5%] w-1/2 flex">
-      <div :key="nozzle.id" v-for="nozzle in nozzles" class="gap-x-2 gap-y-4 flex flex-col justify-around items-center w-full">
+      <div :key="nozzle.id" v-for="nozzle in status.nozzles" class="gap-x-2 gap-y-4 flex flex-col justify-around items-center w-full">
         <span class="text-gray-300" :style="{ fontSize: `clamp(0.25rem, 3vw, 8vh)` }">{{ nozzle.id }}</span>
         <img class="h-3/5" src="/nozzle.svg" />
-        <div class="w-1/4 aspect-[2/1] rounded-lg" :class="nozzle.isActive ? 'bg-green-500' : 'bg-sky-950'"></div>
+        <div class="w-1/4 aspect-[2/1] rounded-lg" :class="nozzle.isVacActive ? 'bg-green-500' : 'bg-sky-950'"></div>
       </div>
     </div>
   </div>
@@ -35,23 +35,22 @@
 export default {
   data() {
     return {
-      done: 5,
-      total: 100,
-      nozzles: [{ id: "L", isActive: true }, { id: "R" }],
+      status: {
+        done: 5,
+        total: 100,
+        nozzles: [{ id: "L", isVacActive: true, isPicking: true }, { id: "R" }],
+      },
       progressSize: 100, // default size
     };
   },
   computed: {
     progress() {
-      if (this.total === 0) return 0; // Avoid division by zero
-      return parseInt((this.done / this.total) * 100);
+      if (this.status.total === 0) return 0; // Avoid division by zero
+      return parseInt((this.status.done / this.status.total) * 100);
     },
   },
   mounted() {
-    setInterval(() => {
-      this.done = this.done + 1;
-      if (this.done > 100) this.done = 0;
-    }, 100);
+    window.ipcRenderer.on("machine-status-updated", this.handleStatusUpdate);
     this.updateProgressSize();
     window.addEventListener("resize", this.updateProgressSize);
   },
@@ -59,6 +58,10 @@ export default {
     window.removeEventListener("resize", this.updateProgressSize);
   },
   methods: {
+    handleStatusUpdate(event, newStatus) {
+      console.log("update:", newStatus);
+      this.status = newStatus;
+    },
     updateProgressSize() {
       const container = this.$refs.containerRef;
       if (container) {
