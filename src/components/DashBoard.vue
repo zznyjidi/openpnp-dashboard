@@ -24,10 +24,14 @@
     <div class="p-[5%] w-1/2 flex">
       <div :key="nozzle.id" v-for="nozzle in status.nozzles" class="gap-x-2 gap-y-4 flex flex-col justify-around items-center w-full">
         <span class="text-gray-300" :style="{ fontSize: `clamp(0.25rem, 4vw, 8vh)` }">{{ nozzle.id }}</span>
-        <img class="h-3/5" :class="nozzle.isPicking ? 'motion-translate-y-loop-[20%] motion-loop-once' : ''" src="/nozzle.svg" />
-        <div class="mt-4 z-50 w-1/4 relative">
-          <div v-if="nozzle.isVacActive" class="w-full aspect-[2/1] z-0 bg-green-500 animate-ping rounded-lg absolute"></div>
-          <div class="transition-colors z-50 w-full aspect-[2/1] rounded-lg" :class="nozzle.isVacActive ? 'bg-green-500 ' : 'bg-sky-950'"></div>
+        <div class="h-3/5 relative" :class="nozzle.isPicking || nozzle.isPlacing ? 'motion-translate-y-loop-[15%] motion-loop-once' : ''">
+          <img class="h-full" src="/nozzle.svg" />
+          <Vue3Lottie class="transition-opacity top-0 absolute" :class="nozzle.isVacActive ? 'opacity-100' : 'opacity-0'" :animationData="airFlow" />
+          <div style="margin-top: -0.28rem" :class="nozzle.hasComponent ? 'motion-opacity-in-0' : 'motion-opacity-out-0'" class="motion-delay-200 motion-duration-200 mx-auto w-1/3 h-[4%] border-2 border-white"></div>
+        </div>
+        <div class="mt-10 z-50 w-1/4 relative">
+          <div v-if="nozzle.isVacActive" class="w-full aspect-[2/1] z-0 bg-sky-500 animate-ping rounded-lg absolute"></div>
+          <div class="transition-colors z-50 w-full aspect-[2/1] rounded-lg" :class="nozzle.isVacActive ? 'bg-sky-500 ' : 'bg-sky-950'"></div>
         </div>
       </div>
     </div>
@@ -35,9 +39,11 @@
 </template>
 
 <script>
+import airFlow from "../assets/airFlow.json";
 export default {
   data() {
     return {
+      airFlow,
       status: {
         done: 5,
         total: 100,
