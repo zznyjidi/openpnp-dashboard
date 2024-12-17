@@ -1,6 +1,15 @@
 <template>
-  <div class="flex w-full h-full">
-    <div class="p-[5%] flex w-1/2 justify-center h-full items-center">
+  <div class="flex w-full h-full overflow-hidden relative">
+    <div
+      :class="{
+        'ring-transparent scale-150': !['ERROR', 'COMPLETED'].includes(status.state),
+        'ring-red-300': status.state === 'ERROR',
+        'ring-green-300': status.state === 'COMPLETED',
+      }"
+      class="transition-all duration-500 absolute w-full h-full ring-[10vw] mix-blend-hard-light animate-pulse blur-[4vw]"
+    ></div>
+
+    <div class="z-10 p-[5%] flex w-1/2 justify-center h-full items-center">
       <div class="flex items-center justify-center w-full h-full">
         <div class="relative w-full h-full">
           <!-- Background Circle -->
@@ -21,7 +30,7 @@
         </div>
       </div>
     </div>
-    <div class="p-[5%] w-1/2 flex">
+    <div class="z-10 p-[5%] w-1/2 flex">
       <div :key="nozzle.id" v-for="nozzle in status.nozzles" class="gap-x-2 gap-y-4 flex flex-col justify-around items-center w-full">
         <span class="text-gray-300" :style="{ fontSize: `clamp(0.25rem, 4vw, 8vh)` }">{{ nozzle.id }}</span>
         <div class="h-3/5 relative" :class="nozzle.isPicking || nozzle.isPlacing ? 'motion-translate-y-loop-[15%] motion-loop-once' : ''">

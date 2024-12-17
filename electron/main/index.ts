@@ -57,7 +57,8 @@ function startStatusServer() {
   let machineStatus = {
     done: 0,
     total: 0,
-    nozzles: [{ id: "L" }, { id: "R" }]
+    nozzles: [{ id: "L" }, { id: "R" }],
+    state: ''
   }
 
   // Flexible update endpoint
@@ -65,14 +66,16 @@ function startStatusServer() {
     const { 
       done, 
       total, 
-      nozzles
+      nozzles,
+      state
     } = req.body
 
     // Update only the provided fields
     machineStatus = {
       done: done ?? machineStatus.done,
       total: total ?? machineStatus.total,
-      nozzles: nozzles ?? machineStatus.nozzles
+      nozzles: nozzles ?? machineStatus.nozzles,
+      state: state ?? machineStatus.state
     }
 
     // Broadcast status update to renderer process
