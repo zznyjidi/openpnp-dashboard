@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "dist-electron/main/index.js",
   "description": "OpenPnP Dashboard.",
-  "author": "Corebb",
+  "author": "Corebb <kuruibb@gmail.com>",
   "license": "MIT",
   "private": true,
   "keywords": [
