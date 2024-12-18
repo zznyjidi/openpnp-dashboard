@@ -29,7 +29,7 @@
   "linux": {
     "target": [
       {
-        "target": "AppImage",
+        "target": "deb",
         "arch": ["x64", "arm64"]  // Move 'arch' inside 'target'
       }
     ],

@@ -1,5 +1,5 @@
 {
-  "name": "electron-vue-vite",
+  "name": "openpnp-dashboard",
   "version": "1.0.0",
   "main": "dist-electron/main/index.js",
   "description": "OpenPnP Dashboard.",
