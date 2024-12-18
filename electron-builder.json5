@@ -29,7 +29,7 @@
   "linux": {
     "target": [
       {
-        "target": "deb",
+        "target": "flatpak",
         "arch": ["x64", "arm64"]  // Move 'arch' inside 'target'
       }
     ],
