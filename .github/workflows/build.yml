@@ -53,6 +53,6 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
-          name: release_on_${{ matrix.os }}
-          path: filtered_release/
+          name: release_on_${{ matrix. os }}
+          path: release/
           retention-days: 5
