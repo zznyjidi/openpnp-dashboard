@@ -21,6 +21,7 @@ jobs:
     strategy:
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
+        arch: [x64, arm64]
 
     steps:
       - name: Checkout Code
@@ -35,14 +36,21 @@ jobs:
         run: npm install
 
       - name: Build Release Files
-        run: npm run build
+        run: |
+          if [ "${{ matrix.os }}" == "macos-latest" ]; then
+            npx electron-builder --mac --${{ matrix.arch }};
+          elif [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
+            npx electron-builder --linux --${{ matrix.arch }};
+          elif [ "${{ matrix.os }}" == "windows-latest" ]; then
+            npx electron-builder --win --${{ matrix.arch }};
+          fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload Installer
         uses: actions/upload-artifact@v3
         with:
-          name: installer_${{ matrix.os }}
+          name: installer_${{ matrix.os }}_${{ matrix.arch }}
           # Adjust the path based on your electron-builder output structure
           path: |
             release/*/*.AppImage
