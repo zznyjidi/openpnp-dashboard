@@ -1,3 +1,4 @@
+// @see https://www.electron.build/configuration/configuration
 {
   "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
   "appId": "com.corebb.openpnpdashbaord",
@@ -8,22 +9,17 @@
   },
   "files": ["dist", "dist-electron"],
   "mac": {
-    "target": [
-      {
-        "target": "dmg",
-        "arch": ["x64", "arm64"]
-      }
-    ],
-    "artifactName": "${productName}-Mac-${version}-${arch}-Installer.${ext}"
+    "target": ["dmg"],
+    "artifactName": "${productName}-Mac-${version}-Installer.${ext}"
   },
   "win": {
     "target": [
       {
         "target": "nsis",
-        "arch": ["x64", "arm64"]
+        "arch": ["x64", "arm64"]  // Add arm64 to the Windows architecture
       }
     ],
-    "artifactName": "${productName}-Windows-${version}-${arch}-Setup.${ext}"
+    "artifactName": "${productName}-Windows-${version}-Setup.${ext}"
   },
   "nsis": {
     "oneClick": false,
@@ -32,12 +28,8 @@
     "deleteAppDataOnUninstall": false
   },
   "linux": {
-    "target": [
-      {
-        "target": "AppImage",
-        "arch": ["x64", "arm64"]
-      }
-    ],
-    "artifactName": "${productName}-Linux-${version}-${arch}.${ext}"
+    "target": ["AppImage"],
+    "arch": ["x64", "arm64"],  // Add arm64 to the Linux architecture
+    "artifactName": "${productName}-Linux-${version}.${ext}"
   }
 }

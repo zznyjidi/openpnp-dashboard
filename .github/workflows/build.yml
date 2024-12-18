@@ -16,24 +16,19 @@ on:
 
 jobs:
   build:
+    runs-on: ${{ matrix.os }}
+
     strategy:
       matrix:
-        include:
-          - os: macos-latest
-            arch: [x64, arm64]
-          - os: ubuntu-latest
-            arch: [x64, arm64]
-          - os: windows-latest
-            arch: [x64, arm64]
-
-    runs-on: ${{ matrix.os }}
+        os: [macos-latest, ubuntu-latest, windows-latest]
+        arch: [x64, arm64]  # Add ARM64 architecture here
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v3
         with:
           node-version: 21
 
@@ -44,10 +39,9 @@ jobs:
         run: npm run build
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TARGET_ARCH: ${{ matrix.arch }}
 
       - name: Upload Installer
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: installer_${{ matrix.os }}_${{ matrix.arch }}
           path: |
