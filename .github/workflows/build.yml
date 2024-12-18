@@ -36,14 +36,7 @@ jobs:
         run: npm install
 
       - name: Build Release Files
-        run: |
-          if [ "${{ matrix.os }}" == "macos-latest" ]; then
-            npx electron-builder --mac --${{ matrix.arch }};
-          elif [ "${{ matrix.os }}" == "ubuntu-latest" ]; then
-            npx electron-builder --linux --${{ matrix.arch }};
-          elif [ "${{ matrix.os }}" == "windows-latest" ]; then
-            npx electron-builder --win --${{ matrix.arch }};
-          fi
+        run: npm run build
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
