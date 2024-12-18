@@ -45,7 +45,7 @@ jobs:
           name: installer_${{ matrix.os }}
           # Adjust the path based on your electron-builder output structure
           path: |
-            release/*.exe
-            release/*.dmg
-            release/*.appimage
+            release/*/*.AppImage
+            release/*/*.exe
+            release/*/*.dmg
           retention-days: 5
