@@ -21,8 +21,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build:x64": "vue-tsc --noEmit && vite build && electron-builder --x64",
-    "build:arm64": "vue-tsc --noEmit && vite build && electron-builder --arm64",
+    "build": "vue-tsc --noEmit && vite build && electron-builder --$TARGET_ARCH",
     "preview": "vite preview"
   },
   "devDependencies": {
