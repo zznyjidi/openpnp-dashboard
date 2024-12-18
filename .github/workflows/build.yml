@@ -45,7 +45,7 @@ jobs:
         with:
           name: installer_${{ matrix.os }}_${{ matrix.arch }}
           path: |
-            release/*/*.AppImage
+            release/*/*.deb
             release/*/*.exe
             release/*/*.dmg
           retention-days: 5
