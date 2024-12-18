@@ -1,34 +1,44 @@
 // @see https://www.electron.build/configuration/configuration
 {
-  $schema: "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
-  appId: "com.corebb.openpnpdashbaord",
-  asar: true,
-  productName: "OpenPnP-Dashboard",
-  directories: {
-    output: "release/${version}",
+  "$schema": "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
+  "appId": "com.corebb.openpnpdashbaord",
+  "asar": true,
+  "productName": "OpenPnP-Dashboard",
+  "directories": {
+    "output": "release/${version}"
   },
-  files: ["dist", "dist-electron"],
-  mac: {
-    target: ["dmg"],
-    artifactName: "${productName}-Mac-${version}-Installer.${ext}",
-  },
-  win: {
-    target: [
+  "files": ["dist", "dist-electron"],
+  "mac": {
+    "target": [
       {
-        target: "nsis",
-        arch: ["x64"],
-      },
+        "target": "dmg",
+        "arch": ["x64", "arm64"]
+      }
     ],
-    artifactName: "${productName}-Windows-${version}-Setup.${ext}",
+    "artifactName": "${productName}-Mac-${version}-${arch}-Installer.${ext}"
   },
-  nsis: {
-    oneClick: false,
-    perMachine: false,
-    allowToChangeInstallationDirectory: true,
-    deleteAppDataOnUninstall: false,
+  "win": {
+    "target": [
+      {
+        "target": "nsis",
+        "arch": ["x64", "arm64"]
+      }
+    ],
+    "artifactName": "${productName}-Windows-${version}-${arch}-Setup.${ext}"
   },
-  linux: {
-    target: ["AppImage"],
-    artifactName: "${productName}-Linux-${version}.${ext}",
+  "nsis": {
+    "oneClick": false,
+    "perMachine": false,
+    "allowToChangeInstallationDirectory": true,
+    "deleteAppDataOnUninstall": false
   },
+  "linux": {
+    "target": [
+      {
+        "target": "AppImage",
+        "arch": ["x64", "arm64"]
+      }
+    ],
+    "artifactName": "${productName}-Linux-${version}-${arch}.${ext}"
+  }
 }

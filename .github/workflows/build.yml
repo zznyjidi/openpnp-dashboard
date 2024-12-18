@@ -16,19 +16,24 @@ on:
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
-
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
-        arch: [x64, arm64]
+        include:
+          - os: macos-latest
+            arch: [x64, arm64]
+          - os: ubuntu-latest
+            arch: [x64, arm64]
+          - os: windows-latest
+            arch: [x64, arm64]
+
+    runs-on: ${{ matrix.os }}
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 21
 
@@ -36,15 +41,14 @@ jobs:
         run: npm install
 
       - name: Build Release Files
-        run: npm run build
+        run: npm run build:${{ matrix.arch }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload Installer
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: installer_${{ matrix.os }}_${{ matrix.arch }}
-          # Adjust the path based on your electron-builder output structure
           path: |
             release/*/*.AppImage
             release/*/*.exe
