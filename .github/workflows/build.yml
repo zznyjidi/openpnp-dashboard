@@ -29,7 +29,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 21
 
       - name: Install Dependencies
         run: npm install
@@ -39,9 +39,20 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Find Installer Files
+        run: |
+          mkdir -p filtered_release
+          if [[ "${{ matrix.os }}" == "windows-latest" ]]; then
+            find release/ -type f -name "*.exe" -exec cp {} filtered_release/ \;
+          elif [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then
+            find release/ -type f -name "*.AppImage" -exec cp {} filtered_release/ \;
+          elif [[ "${{ matrix.os }}" == "macos-latest" ]]; then
+            find release/ -type f -name "*.dmg" -exec cp {} filtered_release/ \;
+          fi
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
-          name: release_on_${{ matrix. os }}
-          path: release/
+          name: release_on_${{ matrix.os }}
+          path: filtered_release/
           retention-days: 5

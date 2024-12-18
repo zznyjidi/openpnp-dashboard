@@ -1,9 +1,9 @@
 {
   "name": "electron-vue-vite",
-  "version": "28.1.0",
+  "version": "1.0.0",
   "main": "dist-electron/main/index.js",
-  "description": "Really simple Electron + Vue + Vite boilerplate.",
-  "author": "草鞋没号 <308487730@qq.com>",
+  "description": "OpenPnP Dashboard.",
+  "author": "Corebb",
   "license": "MIT",
   "private": true,
   "keywords": [
@@ -31,12 +31,12 @@
     "electron-builder": "^24.13.3",
     "postcss": "^8.4.49",
     "tailwindcss": "^3.4.16",
-    "typescript": "^5.4.2",
+    "typescript": "~5.6.3",
     "vite": "^5.1.5",
     "vite-plugin-electron": "^0.28.4",
     "vite-plugin-electron-renderer": "^0.14.5",
     "vue": "^3.4.21",
-    "vue-tsc": "^2.0.6"
+    "vue-tsc": "^2.0.0"
   },
   "dependencies": {
     "body-parser": "^1.20.3",
