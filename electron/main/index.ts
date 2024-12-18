@@ -48,7 +48,7 @@ const indexHtml = path.join(RENDERER_DIST, 'index.html')
 // Status Server Function
 function startStatusServer() {
   const serverApp = express()
-  const PORT = 3000
+  const PORT = 10064
 
   // Middleware
   serverApp.use(bodyParser.json())
@@ -66,17 +66,29 @@ function startStatusServer() {
     const { 
       done, 
       total, 
-      nozzles,
+      nozzles: updatedNozzles,
       state
-    } = req.body
+  } = req.body;
 
-    // Update only the provided fields
-    machineStatus = {
+  // Update the nozzles while keeping existing nozzles intact
+  if (updatedNozzles && Array.isArray(updatedNozzles)) {
+      // Create a map for quick lookup of updated nozzle data by ID
+      const updatedNozzlesMap = new Map(updatedNozzles.map(nozzle => [nozzle.id, nozzle]));
+      
+      // Update only the nozzles specified in the request body
+      machineStatus.nozzles = machineStatus.nozzles.map(existingNozzle => {
+          const updatedNozzle = updatedNozzlesMap.get(existingNozzle.id);
+          return updatedNozzle ? { ...existingNozzle, ...updatedNozzle } : existingNozzle;
+      });
+  }
+
+  // Update the rest of the fields
+  machineStatus = {
       done: done ?? machineStatus.done,
       total: total ?? machineStatus.total,
-      nozzles: nozzles ?? machineStatus.nozzles,
+      nozzles: machineStatus.nozzles, // Already updated above
       state: state ?? machineStatus.state
-    }
+  };
 
     // Broadcast status update to renderer process
     if (win) {
@@ -84,8 +96,7 @@ function startStatusServer() {
     }
 
     res.json({
-      message: 'Status updated successfully',
-      status: machineStatus
+      message: 'Status updated successfully'
     })
   })
 
