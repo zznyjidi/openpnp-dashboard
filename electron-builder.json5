@@ -33,7 +33,7 @@
         "arch": ["x64", "arm64"]  // Move 'arch' inside 'target'
       }
     ],
-	  "icon" : "icons/icon.png",
+	  "icon" : "icons/icon.icns",
     "artifactName": "${productName}-Linux-${version}.${ext}"
   }
 }
