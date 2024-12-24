@@ -54,9 +54,9 @@ export default {
     return {
       airFlow,
       status: {
-        done: 5,
-        total: 100,
-        nozzles: [{ id: "L", isVacActive: true, isPicking: true }, { id: "R" }],
+        done: 0,
+        total: 0,
+        nozzles: [{ id: "N1" }, { id: "N2" }],
       },
       progressSize: 100, // default size
     };

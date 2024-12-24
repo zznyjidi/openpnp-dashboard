@@ -48,7 +48,7 @@ function asyncHttpPostJson(url, jsonData) {
   thread.start();
 }
 
-const nozzleName = nozzle.getName();
+var nozzleName = nozzle.getName();
 
 // Example usage
 var postData = {

@@ -57,7 +57,7 @@ function startStatusServer() {
   let machineStatus = {
     done: 0,
     total: 0,
-    nozzles: [{ id: "L" }, { id: "R" }],
+    nozzles: [{ id: "N1" }, { id: "N2" }],
     state: ''
   }
 
