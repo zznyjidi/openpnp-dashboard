@@ -48,8 +48,8 @@ function asyncHttpPostJson(url, jsonData) {
   thread.start();
 }
 
-var activePlacements = Job.getActivePlacements(Job.getRootPanelLocation());
-var totalActivePlacements = Job.getTotalActivePlacements(Job.getRootPanelLocation());
+var activePlacements = job.getActivePlacements(job.getRootPanelLocation());
+var totalActivePlacements = job.getTotalActivePlacements(job.getRootPanelLocation());
 
 // Example usage
 var postData = {
