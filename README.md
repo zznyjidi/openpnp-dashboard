@@ -7,3 +7,6 @@ Download the latest builds on Actions, it supports Windows and Linux and macOS o
 
 # Scripts
 Put the scripts files in OpenPnP's Scripts Events Folder.
+
+# Extra Blcok
+Add Extra Block to Trigger Rebuild
